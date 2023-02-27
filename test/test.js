@@ -150,3 +150,75 @@ describe('bin-pack with in place option', function() {
 		verifyResult(result, bins);
 	});
 });
+
+describe('bin-pack with maxWidth option', function() {
+	it('packs properly (basic)', function() {
+		var bins = [
+			{ width: 10, height: 10 },
+			{ width: 10, height: 10 },
+			{ width: 10, height: 10 },
+			{ width: 10, height: 10 }
+		];
+
+		var result = pack(bins, { maxWidth: 15 });
+		assert.ok('items' in result, "Result has items");
+		assert.equal(result.items.length, bins.length, "Result has same amount of items as the source");
+		verifyResult(result, result.items);
+	});
+
+	it('packs properly when items are irregular', function() {
+		var bins = [
+			{ width: 10,  height: 110 },
+			{ width: 100, height: 10 },
+			{ width: 20,  height: 1 },
+			{ width: 4,   height: 48 }
+		];
+
+		var result = pack(bins, {maxWidth: 110});
+		assert.ok('items' in result, "Result has items");
+		assert.equal(result.items.length, bins.length, "Result has same amount of items as the source");
+		verifyResult(result, result.items);
+	});
+
+	it('does not exceed the maximum if the maximum is greater than all box dimensions', function() {
+		var bins = [
+			{ width: 10, height: 10 },
+			{ width: 10, height: 10 },
+			{ width: 10, height: 10 },
+			{ width: 10, height: 10 }
+		];
+
+		var result = pack(bins, { maxWidth: 15 });
+		assert.ok(result.width < 15, 'Width is less than maxWidth')
+	})
+
+	it('does not try to maintain a square', function() {
+		var bins = [
+			{ width: 10, height: 10 },
+			{ width: 10, height: 10 },
+			{ width: 10, height: 10 },
+			{ width: 10, height: 10 }
+		];
+
+		var result = pack(bins, { maxWidth: 15 });
+		assert.ok(result.height > result.width + bins[3].width, 'Height is greater than width by more than the width of the last box')
+	})
+
+	it('does not reject bins that exceed the maximum', function () {
+		var bins = [
+			{ width: 10,  height: 110 },
+			{ width: 100, height: 10 },
+			{ width: 20,  height: 1 },
+			{ width: 4,   height: 48 }
+		];
+
+		var result = pack(bins, {maxWidth: 90});
+		assert.ok('items' in result, "Result has items");
+		assert.equal(result.items.length, bins.length, "Result has same amount of items as the source");
+		verifyResult(result, result.items);
+	})
+
+	describe('with strictMax: true', function() {
+		it('rejects bins that exceed the maximum')
+	})
+})

@@ -3,9 +3,16 @@
 This is a binary tree based bin packing algorithm that is more complex than
 the simple Packer (packer.js). Instead of starting off with a fixed width and
 height, it starts with the width and height of the first block passed and then
-grows as necessary to accomodate each subsequent block. As it grows it attempts
+grows as necessary to accomodate each subsequent block.
+
+The default behavior as it grows is that it attempts
 to maintain a roughly square ratio by making 'smart' choices about whether to
 grow right or down.
+
+If either a maxWidth or a maxHeight is set, it will try not to grow beyond that
+limit, and choose instead to grow in the other direction. If the first block is
+larger than the given limit, however, that block's dimension will replace the
+limit.
 
 When growing, the algorithm can only grow to the right OR down. Therefore, if
 the new block is BOTH wider and taller than the current target then it will be
@@ -21,10 +28,19 @@ by simply chosing a sensible starting block.
 Best results occur when the input blocks are sorted by height, or even better
 when sorted by max(width,height).
 
+Construction:
+------------
+	{
+		maxWidth = Infinity: set a max width to constrain the growth in that direction
+		maxHeight = Infinity: set a max height to constrain the growth in that direction
+		TODO strictMax = false: reject blocks that are larger than the max
+	}
+
 Inputs:
 ------
 
 	blocks: array of any objects that have .w and .h attributes
+
 
 Outputs:
 -------
@@ -57,15 +73,23 @@ Example:
 
 ******************************************************************************/
 
-var GrowingPacker = function() { };
+var GrowingPacker = function({maxWidth = Infinity, maxHeight = Infinity, strictMax = false}) {
+	this.maxWidth = maxWidth
+	this.maxHeight = maxHeight
+	// this.strictMax = strictMax
+	this.ensureSquare = maxWidth === Infinity && maxHeight === Infinity
+};
 
 GrowingPacker.prototype = {
 
 	fit: function(blocks) {
-		var n, node, block, len = blocks.length, fit;
-		var width  = len > 0 ? blocks[0].width : 0;
-		var height = len > 0 ? blocks[0].height : 0;
-		this.root = { x: 0, y: 0, width: width, height: height };
+		var len = blocks.length
+		if (len === 0) { return }
+
+		var n, node, block, fit;
+		var width  = this.strictMax && (this.maxWidth < Infinity) ? this.maxWidth : blocks[0].width;
+		var height  = this.strictMax && (this.maxHeight < Infinity) ? this.maxHeight : blocks[0].height;
+		this.root = { x: 0, y: 0, width, height };
 		for (n = 0; n < len ; n++) {
 			block = blocks[n];
 			if (node = this.findNode(this.root, block.width, block.height)) {
@@ -84,7 +108,7 @@ GrowingPacker.prototype = {
 	findNode: function(root, width, height) {
 		if (root.used)
 			return this.findNode(root.right, width, height) || this.findNode(root.down, width, height);
-		else if ((width <= root.width) && (height <= root.height))
+		else if (width <= root.width && height <= root.height)
 			return root;
 		else
 			return null;
@@ -98,11 +122,13 @@ GrowingPacker.prototype = {
 	},
 
 	growNode: function(width, height) {
-		var canGrowDown  = (width  <= this.root.width);
-		var canGrowRight = (height <= this.root.height);
+		var canGrowDown  = width  <= this.root.width;
+		var canGrowRight = height <= this.root.height;
 
-		var shouldGrowRight = canGrowRight && (this.root.height >= (this.root.width  + width )); // attempt to keep square-ish by growing right when height is much greater than width
-		var shouldGrowDown  = canGrowDown  && (this.root.width  >= (this.root.height + height)); // attempt to keep square-ish by growing down  when width  is much greater than height
+		const proposedNewWidth = this.root.width + width
+		const proposedNewHeight = this.root.height + height
+		var shouldGrowRight = canGrowRight && (this.ensureSquare ? this.root.height : this.maxWidth) >= proposedNewWidth; // attempt to keep square-ish by growing right when height is much greater than width
+		var shouldGrowDown  = canGrowDown  && (this.ensureSquare ? this.root.width : this.maxHeight) >= proposedNewHeight; // attempt to keep square-ish by growing down  when width  is much greater than height
 
 		if (shouldGrowRight)
 			return this.growRight(width, height);

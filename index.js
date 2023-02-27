@@ -4,7 +4,7 @@ var GrowingPacker = require('./packer.growing.js');
 
 module.exports = function(items, options) {
 	options = options || {};
-	var packer = new GrowingPacker();
+	var packer = new GrowingPacker({maxWidth: options.maxWidth, maxHeight: options.maxHeight, strictMax: options.strictMax});
 	var inPlace = options.inPlace || false;
 
 	// Clone the items.

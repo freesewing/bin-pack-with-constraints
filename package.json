@@ -1,11 +1,11 @@
 {
-  "name": "bin-pack",
-  "version": "1.0.2",
-  "description": "A packing algorithm for 2D bin packing. Largely based on code and a blog post by Jake Gordon.",
+  "name": "bin-pack-with-constraints",
+  "version": "1.0.0",
+  "description": "A packing algorithm for 2D bin packing that allows setting a max width or height. Largely based on code and a blog post by Jake Gordon and Bryan Burgers.",
   "author": {
-    "name": "Bryan Burgers",
-    "email": "bryan@burgers.io",
-    "url": "http://burgers.io"
+    "name": "Enoch Riese",
+    "email": "enoch.riese@gmail.com",
+    "url": "https://github.com/eriese"
   },
   "main": "index.js",
   "keywords": [
@@ -16,17 +16,16 @@
     "pack"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/bryanburgers/bin-pack",
+  "homepage": "https://github.com/eriese/bin-pack-with-constraints",
   "bugs": {
-    "url": "https://github.com/bryanburgers/bin-pack/issues"
+    "url": "https://github.com/eriese/bin-pack-with-constraints/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:bryanburgers/bin-pack.git"
+    "url": "https://github.com/eriese/bin-pack-with-constraints.git"
   },
-  "dependencies": {},
   "devDependencies": {
-    "mocha": "~1.12.1"
+    "mocha": "^10.2.0"
   },
   "scripts": {
     "test": "node node_modules/mocha/bin/mocha"
