@@ -11,6 +11,8 @@ module.exports = function(items, options) {
 	var newItems = items.map(function(item) { return inPlace ? item : { width: item.width, height: item.height, item: item }; });
 
 	newItems = newItems.sort(function(a, b) {
+		if (options.maxWidth && !options.maxHeight) return b.width - a.width
+		if (options.maxHeight) return b.height - a.height
 		// TODO: check that each actually HAS a width and a height.
 		// Sort based on the size (area) of each block.
 		return (b.width * b.height) - (a.width * a.height);

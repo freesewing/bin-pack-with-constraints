@@ -116,8 +116,21 @@ GrowingPacker.prototype = {
 
 	splitNode: function(node, width, height) {
 		node.used = true;
-		node.down  = { x: node.x,         y: node.y + height, width: node.width,         height: node.height - height };
-		node.right = { x: node.x + width, y: node.y,          width: node.width - width, height: height               };
+		const downY = node.y + height
+		node.down  = {
+			x: node.x,
+			y: downY,
+			width: node.width,
+			height: Math.min(node.height - height, this.maxHeight - downY)
+		};
+
+		const rightX = node.x + width
+		node.right = {
+			x: rightX,
+			y: node.y,
+			width: Math.min(node.width - width, this.maxWidth - rightX),
+			height: height
+		};
 		return node;
 	},
 
@@ -126,8 +139,8 @@ GrowingPacker.prototype = {
 		var canGrowRight = height <= this.root.height;
 
 		const proposedNewWidth = this.root.width + width
-		const proposedNewHeight = this.root.height + height
 		var shouldGrowRight = canGrowRight && (this.ensureSquare ? this.root.height : this.maxWidth) >= proposedNewWidth; // attempt to keep square-ish by growing right when height is much greater than width
+		const proposedNewHeight = this.root.height + height
 		var shouldGrowDown  = canGrowDown  && (this.ensureSquare ? this.root.width : this.maxHeight) >= proposedNewHeight; // attempt to keep square-ish by growing down  when width  is much greater than height
 
 		if (shouldGrowRight)
