@@ -1,5 +1,5 @@
 {
-  "name": "bin-pack-with-constraints",
+  "name": "@freesewing/bin-pack-with-constraints",
   "version": "1.0.2",
   "description": "A packing algorithm for 2D bin packing that allows setting a max width or height. Largely based on code and a blog post by Jake Gordon and Bryan Burgers.",
   "author": {
@@ -7,7 +7,7 @@
     "email": "enoch.riese@gmail.com",
     "url": "https://github.com/eriese"
   },
-  "main": "index.js",
+  "module": "src/index.mjs",
   "keywords": [
     "bin",
     "rectangle",
@@ -16,18 +16,21 @@
     "pack"
   ],
   "license": "MIT",
-  "homepage": "https://github.com/eriese/bin-pack-with-constraints",
+  "homepage": "https://github.com/freesewing/bin-pack-with-constraints",
   "bugs": {
-    "url": "https://github.com/eriese/bin-pack-with-constraints/issues"
+    "url": "https://github.com/freesewing/bin-pack-with-constraints/issues"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/eriese/bin-pack-with-constraints.git"
+    "url": "https://github.com/freesewing/bin-pack-with-constraints.git"
   },
   "devDependencies": {
+    "@freesewing/prettier-config": "^3.0.0",
     "mocha": "^10.2.0"
   },
   "scripts": {
-    "test": "node node_modules/mocha/bin/mocha"
-  }
+    "prettier": "npx prettier --write 'src/*.mjs' 'tests/*.mjs'",
+    "test": "node node_modules/mocha/bin/mocha tests/*.mjs"
+  },
+  "prettier": "@freesewing/prettier-config"
 }
