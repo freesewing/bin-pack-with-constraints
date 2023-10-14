@@ -3,10 +3,11 @@
   "version": "2.0.0",
   "description": "A packing algorithm for 2D bin packing that allows setting a max width or height. Largely based on code and a blog post by Jake Gordon and Bryan Burgers.",
   "author": {
-    "name": "Enoch Riese",
-    "email": "enoch.riese@gmail.com",
-    "url": "https://github.com/eriese"
+    "name": "FreeSewing",
+    "email": "info@freesewing.org",
+    "url": "https://github.com/freesewing"
   },
+  "type": "module",
   "module": "src/index.mjs",
   "keywords": [
     "bin",
@@ -31,6 +32,18 @@
   "scripts": {
     "prettier": "npx prettier --write 'src/*.mjs' 'tests/*.mjs'",
     "test": "node node_modules/mocha/bin/mocha tests/*.mjs"
+  },
+  "files": [
+    "src/*",
+    "README.md"
+  ],
+  "publishConfig": {
+    "access": "public",
+    "tag": "latest"
+  },
+  "engines": {
+    "node": "18",
+    "npm": "9"
   },
   "prettier": "@freesewing/prettier-config"
 }
