@@ -1,6 +1,6 @@
 {
   "name": "@freesewing/bin-pack-with-constraints",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "A packing algorithm for 2D bin packing that allows setting a max width or height. Largely based on code and a blog post by Jake Gordon and Bryan Burgers.",
   "author": {
     "name": "FreeSewing",
